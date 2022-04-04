@@ -22,7 +22,7 @@ Route::get('/', function () {
     // exact same as line 26
     // dispatch(new ReconcileAccount($user));
 
-    ReconcileAccount::dispatch($user);
+    ReconcileAccount::dispatch($user)->onQueue('high');
 
     return 'Finished';
 });
