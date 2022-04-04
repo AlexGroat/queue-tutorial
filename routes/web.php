@@ -3,6 +3,7 @@
 use App\Jobs\ReconcileAccount;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use Illuminate\Pipeline\Pipeline;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,14 +16,46 @@ use App\Models\User;
 |
 */
 
+// Route::get('/', function () {
+
+//     // $user = User::first();
+
+//     // // exact same as line 26
+//     // // dispatch(new ReconcileAccount($user));
+
+//     // ReconcileAccount::dispatch($user)->onQueue('high');
+
+//     // return 'Finished';
+// });
+
+
 Route::get('/', function () {
+    $pipeline = app(Pipeline::class);
 
-    $user = User::first();
+    $pipeline->send('hello freaking world')
+        // through array is known as PIPES
+        ->through([
+            // parameters: accept the data, pass through next pipe
+            function ($string, $next) {
+                $string = ucwords($string);
 
-    // exact same as line 26
-    // dispatch(new ReconcileAccount($user));
+                return $next($string);
+            },
 
-    ReconcileAccount::dispatch($user)->onQueue('high');
+            function ($string, $next) {
+                // string replace, replace first parameter with following parameter in selected string
+                // case insensitive string replace
+                $string = str_ireplace('freaking', '', $string);
 
-    return 'Finished';
+                return $next($string);
+            },
+
+            // last pipe
+            ReconcileAccount::class
+        ])
+        ->then(function ($string) {
+            dump($string);
+        });
+
+    return 'Done';
 });
