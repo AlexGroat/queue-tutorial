@@ -16,10 +16,13 @@ use App\Models\User;
 */
 
 Route::get('/', function () {
-    
+
     $user = User::first();
 
-    dispatch(new ReconcileAccount($user));
+    // exact same as line 26
+    // dispatch(new ReconcileAccount($user));
+
+    ReconcileAccount::dispatch($user);
 
     return 'Finished';
 });
