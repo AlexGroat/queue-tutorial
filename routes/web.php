@@ -14,5 +14,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    
+    dispatch(function () {
+        
+    logger('Logging the logger');
+    })->delay(now()->addMinutes(2));
+
+    return 'Finished';
 });
