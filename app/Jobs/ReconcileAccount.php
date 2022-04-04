@@ -33,8 +33,8 @@ class ReconcileAccount implements ShouldQueue
      *
      * @return void
      */
-    public function handle($string, $next)
+    public function handle()
     {
-        return $next('Something else');
+        
     }
 }

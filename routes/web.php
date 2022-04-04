@@ -1,8 +1,8 @@
 <?php
 
 use App\Jobs\ReconcileAccount;
-use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Pipeline\Pipeline;
 
 /*
@@ -16,46 +16,46 @@ use Illuminate\Pipeline\Pipeline;
 |
 */
 
-// Route::get('/', function () {
-
-//     // $user = User::first();
-
-//     // // exact same as line 26
-//     // // dispatch(new ReconcileAccount($user));
-
-//     // ReconcileAccount::dispatch($user)->onQueue('high');
-
-//     // return 'Finished';
-// });
-
-
 Route::get('/', function () {
-    $pipeline = app(Pipeline::class);
 
-    $pipeline->send('hello freaking world')
-        // through array is known as PIPES
-        ->through([
-            // parameters: accept the data, pass through next pipe
-            function ($string, $next) {
-                $string = ucwords($string);
+    $user = User::first();
 
-                return $next($string);
-            },
+    // exact same as line 26
+    // dispatch(new ReconcileAccount($user));
 
-            function ($string, $next) {
-                // string replace, replace first parameter with following parameter in selected string
-                // case insensitive string replace
-                $string = str_ireplace('freaking', '', $string);
+    ReconcileAccount::dispatch($user);
 
-                return $next($string);
-            },
-
-            // last pipe
-            ReconcileAccount::class
-        ])
-        ->then(function ($string) {
-            dump($string);
-        });
-
-    return 'Done';
+    return 'Finished';
 });
+
+
+// Route::get('/', function () {
+//     $pipeline = app(Pipeline::class);
+
+//     $pipeline->send('hello freaking world')
+//         // through array is known as PIPES
+//         ->through([
+//             // // parameters: accept the data, pass through next pipe
+//             // function ($string, $next) {
+//             //     $string = ucwords($string);
+
+//             //     return $next($string);
+//             // },
+
+//             // function ($string, $next) {
+//             //     // string replace, replace first parameter with following parameter in selected string
+//             //     // case insensitive string replace
+//             //     $string = str_ireplace('freaking', '', $string);
+
+//             //     return $next($string);
+//             // },
+
+//             // last pipe
+//             ReconcileAccount::class
+//         ])
+//         ->then(function ($string) {
+//             dump($string);
+//         });
+
+//     return 'Done';
+// });
