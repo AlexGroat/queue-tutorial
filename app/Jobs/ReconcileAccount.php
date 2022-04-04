@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-
+use Illuminate\Filesystem\Filesystem;
 
 
 class ReconcileAccount implements ShouldQueue
@@ -33,7 +33,7 @@ class ReconcileAccount implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(FileSystem $file)
     {
         logger('Reconcile:' . $this->user->name);
     }
